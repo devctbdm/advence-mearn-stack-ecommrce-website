@@ -265,36 +265,38 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <StatCard
-        title="Total Products"
-        value={stats.products}
-        color="blue"
-        trend={trends.products}
-        icon={<ArrowUpNarrowWide />}
-      />
-      <StatCard
-        title="Total Orders"
-        value={stats.orders}
-        color="purple"
-        trend={trends.orders}
-        icon={<ShoppingBag />}
-      />
-      <StatCard
-        title="Total Revenue"
-        value={`$${stats.revenue}`}
-        color="green"
-        trend={trends.revenue}
-        icon={<DollarSign />}
-      />
-      <StatCard
-        title="Total Users"
-        value={stats.users}
-        color="orange"
-        trend={trends.users}
-        icon={<User />}
-      />
-      <div className="col-span-3">
+    <div className="">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 gap-y-4 gap-x-4 py-5">
+        <StatCard
+          title="Total Products"
+          value={stats.products}
+          color="blue"
+          trend={trends.products}
+          icon={<ArrowUpNarrowWide />}
+        />
+        <StatCard
+          title="Total Orders"
+          value={stats.orders}
+          color="purple"
+          trend={trends.orders}
+          icon={<ShoppingBag />}
+        />
+        <StatCard
+          title="Total Revenue"
+          value={`$${stats.revenue}`}
+          color="green"
+          trend={trends.revenue}
+          icon={<DollarSign />}
+        />
+        <StatCard
+          title="Total Users"
+          value={stats.users}
+          color="orange"
+          trend={trends.users}
+          icon={<User />}
+        />
+      </div>
+      <div className="col-span-full lg:col-span-2">
         <h2 className="mb-4 text-xl font-semibold text-gray-900">
           Recent Orders
         </h2>
@@ -308,7 +310,7 @@ export default function Dashboard() {
                   <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                     Order ID
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500 hidden sm:table-cell">
+                  <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                     Customer
                   </th>
                   <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
@@ -317,7 +319,7 @@ export default function Dashboard() {
                   <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                     Total
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500 hidden md:table-cell">
+                  <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                     Date
                   </th>
                 </tr>
@@ -328,7 +330,7 @@ export default function Dashboard() {
                     <td className="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">
                       #{order._id.slice(-8)}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {order.user?.name || "Unknown"}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4">
@@ -341,7 +343,7 @@ export default function Dashboard() {
                     <td className="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900">
                       ${order.totalPrice}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden md:table-cell">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                   </tr>
