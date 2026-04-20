@@ -61,7 +61,7 @@ const orderSchema = new mongoose.Schema({
   },
   taxName: {
     type: String,
-    default: "Tax",
+    default: 'Tax',
   },
   shippingPrice: {
     type: Number,

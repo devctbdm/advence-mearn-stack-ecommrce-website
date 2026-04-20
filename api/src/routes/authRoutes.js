@@ -98,10 +98,7 @@ router.get('/currencies', protect, getCurrencies);
 router.put(
   '/change-password',
   protect,
-  [
-    body('currentPassword').notEmpty(),
-    body('newPassword').isLength({ min: 6 }),
-  ],
+  [body('currentPassword').notEmpty(), body('newPassword').isLength({ min: 6 })],
   validate,
   changePassword
 );

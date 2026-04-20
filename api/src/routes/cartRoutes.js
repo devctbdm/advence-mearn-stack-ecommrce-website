@@ -21,12 +21,7 @@ router.delete('/:itemId', removeFromCart);
 router.delete('/', clearCart);
 
 // Apply promo code
-router.post(
-  '/apply-promo',
-  [body('code').notEmpty().trim()],
-  validate,
-  applyPromoCode
-);
+router.post('/apply-promo', [body('code').notEmpty().trim()], validate, applyPromoCode);
 
 // Remove promo code
 router.delete('/remove-promo', removePromoCode);

@@ -2,7 +2,14 @@ import express from 'express';
 import { body, param } from 'express-validator';
 import { validate } from '../middleware/validation.js';
 import { admin, protect } from '../middleware/auth.js';
-import { getAllUsers, getUserById, updateProfile, updateUser, deleteUser, getCurrencies } from '../controllers/userController.js';
+import {
+  getAllUsers,
+  getUserById,
+  updateProfile,
+  updateUser,
+  deleteUser,
+  getCurrencies,
+} from '../controllers/userController.js';
 
 const router = express.Router();
 

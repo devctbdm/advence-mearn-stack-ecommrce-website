@@ -92,7 +92,8 @@ const updatePromoCode = async (req, res) => {
     if (code) updateData.code = code.toUpperCase();
     if (description) updateData.description = description;
     if (discountType) updateData.discountType = discountType;
-    if (discountValue !== undefined && discountValue !== '') updateData.discountValue = discountValue;
+    if (discountValue !== undefined && discountValue !== '')
+      updateData.discountValue = discountValue;
     if (minPurchase !== undefined && minPurchase !== '') updateData.minPurchase = minPurchase;
     if (maxDiscount !== undefined && maxDiscount !== '') updateData.maxDiscount = maxDiscount;
     if (usageLimit !== undefined && usageLimit !== '') updateData.usageLimit = usageLimit;
@@ -114,11 +115,10 @@ const updatePromoCode = async (req, res) => {
       }
     }
 
-    const promo = await PromoCode.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const promo = await PromoCode.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!promo) {
       return res.status(404).json({ message: 'Promo code not found' });
@@ -168,8 +168,9 @@ const getActivePromoCodes = async (req, res) => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
     // Fetch all active promos
-    const allActive = await PromoCode.find({ isActive: true })
-      .select('code description discountType discountValue minPurchase maxDiscount usageLimit startDate endDate');
+    const allActive = await PromoCode.find({ isActive: true }).select(
+      'code description discountType discountValue minPurchase maxDiscount usageLimit startDate endDate'
+    );
 
     // Filter by comparing date-only (ignore time)
     const validPromos = allActive.filter((promo) => {

@@ -16,7 +16,7 @@ const getProducts = async (req, res) => {
       const categories = Array.isArray(req.query.category)
         ? req.query.category
         : req.query.category.split(',');
-      query.category = { $in: categories.map(c => c.trim()) };
+      query.category = { $in: categories.map((c) => c.trim()) };
     }
     if (req.query.minPrice) query.price = { $gte: req.query.minPrice };
     if (req.query.maxPrice) query.price = { ...query.price, $lte: req.query.maxPrice };
@@ -24,15 +24,12 @@ const getProducts = async (req, res) => {
       const colorArray = Array.isArray(req.query.colors)
         ? req.query.colors
         : req.query.colors.split(',');
-      const cleanedColors = colorArray.map(c => c.trim()).filter(Boolean);
+      const cleanedColors = colorArray.map((c) => c.trim()).filter(Boolean);
       if (cleanedColors.length > 0) {
         query.colors = {
           $elemMatch: {
-            $or: [
-              { hex: { $in: cleanedColors } },
-              { name: { $in: cleanedColors } }
-            ]
-          }
+            $or: [{ hex: { $in: cleanedColors } }, { name: { $in: cleanedColors } }],
+          },
         };
       }
     }

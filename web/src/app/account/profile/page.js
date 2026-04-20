@@ -3,7 +3,7 @@
 import { authAPI } from "@/lib/api";
 import useAuthStore from "@/lib/useAuthStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { Edit2, Heart, Package, Save, Settings, User, X, Globe } from "lucide-react";
+import { Edit2, Heart, Package, Save, Settings, User, X, Globe, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -178,6 +178,11 @@ export default function AccountProfilePage() {
                     href: "/account/settings",
                     icon: Settings,
                     label: "Settings",
+                  },
+                  {
+                    href: "/account/my-reviews",
+                    icon: Star,
+                    label: "My Reviews",
                   },
                 ].map((itemNav, i) => (
                   <motion.div

@@ -40,21 +40,27 @@ const promoCodeSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  applicableProducts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-  }],
-  applicableCategories: [{
-    type: String,
-  }],
+  applicableProducts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
+  applicableCategories: [
+    {
+      type: String,
+    },
+  ],
   isOneTime: {
     type: Boolean,
     default: false,
   },
-  usedByUsers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
+  usedByUsers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   isActive: {
     type: Boolean,
     default: true,

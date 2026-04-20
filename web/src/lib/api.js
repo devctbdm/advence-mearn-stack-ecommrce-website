@@ -154,4 +154,18 @@ export const taxAPI = {
   delete: (id) => api.delete(`/taxes/${id}`),
 };
 
+export const reviewsAPI = {
+  getAll: (params) => api.get("/reviews", { params }),
+  getById: (id) => api.get(`/reviews/${id}`),
+  getProductReviews: (productId, params) =>
+    api.get(`/reviews/product/${productId}`, { params }),
+  create: (data) => api.post("/reviews", data),
+  update: (id, data) => api.put(`/reviews/${id}`, data),
+  delete: (id) => api.delete(`/reviews/${id}`),
+  approve: (id) => api.put(`/reviews/${id}/approve`),
+  reject: (id) => api.put(`/reviews/${id}/reject`),
+  reply: (id, message) => api.put(`/reviews/${id}/reply`, { message }),
+  getPendingCount: () => api.get("/reviews/pending-count"),
+};
+
 export default api;
