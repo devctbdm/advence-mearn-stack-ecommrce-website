@@ -1,3 +1,4 @@
+import logger from '../config/logger.js';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import Review from '../models/Review.js';
@@ -31,6 +32,12 @@ const getReviews = async (req, res) => {
     if (req.query.rating && req.query.rating !== 'undefined') {
       query.rating = parseInt(req.query.rating);
     }
+    if (req.query.userId && req.query.userId !== 'undefined') {
+      query.user = req.query.userId;
+    }
+    if (!req.query.userId && req.user?.role !== 'admin') {
+      query.user = req.user?._id;
+    }
 
     if (req.query.search) {
       const products = await Product.find({
@@ -42,11 +49,6 @@ const getReviews = async (req, res) => {
         { comment: { $regex: req.query.search, $options: 'i' } },
       ];
     }
-
-    // Debug logging
-    console.log('getReviews - User:', req.user?._id, 'Role:', req.user?.role);
-    console.log('getReviews - Query:', JSON.stringify(query));
-    console.log('getReviews - Page:', page, 'Limit:', limit);
 
     const sortField = req.query.sort || 'createdAt';
     const sortOrder = req.query.order === 'asc' ? 1 : -1;
@@ -61,7 +63,13 @@ const getReviews = async (req, res) => {
 
     const total = await Review.countDocuments(query);
 
-    console.log('getReviews - Found:', reviews.length, 'reviews, Total:', total);
+    logger.debug('Fetched reviews', {
+      userId: req.user?._id,
+      query: req.query,
+      found: reviews.length,
+      total,
+      path: req.path,
+    });
 
     res.json({
       reviews,
@@ -181,17 +189,26 @@ const updateReview = async (req, res) => {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    if (review.user.toString() !== req.user._id.toString()) {
+    const isAdmin = req.user.role === 'admin';
+    const isOwner = review.user.toString() === req.user._id.toString();
+
+    // Admin can edit any review, regular users can only edit their own non-approved reviews
+    if (!isAdmin && !isOwner) {
       return res.status(403).json({ message: 'Not authorized to update this review' });
     }
 
-    if (review.status === 'approved') {
+    if (!isAdmin && review.status === 'approved') {
       return res.status(400).json({ message: 'Cannot update an approved review' });
     }
 
     review.rating = rating || review.rating;
     review.comment = comment || review.comment;
     await review.save();
+
+    // Update product rating if review is approved
+    if (review.status === 'approved') {
+      await updateProductRating(review.product);
+    }
 
     const populatedReview = await Review.findById(review._id)
       .populate('product', 'name images')

@@ -22,12 +22,14 @@ export default function MyReviewsPage() {
   }, [user]);
 
   const fetchMyReviews = async () => {
+    if (!user?._id) return;
     setLoading(true);
     try {
-      const res = await reviewsAPI.getAll({ userId: user?._id });
+      const res = await reviewsAPI.getAll({ limit: 50 });
       setReviews(res.data.reviews);
     } catch (err) {
-      toast.error("Failed to load reviews");
+      console.error("Load reviews error:", err.response?.data || err.message);
+      toast.error(err.response?.data?.message || "Failed to load reviews");
     } finally {
       setLoading(false);
     }

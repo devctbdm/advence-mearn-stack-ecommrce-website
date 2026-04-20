@@ -29,6 +29,13 @@ export default function ReviewsPage() {
     reviewId: null,
     deleting: false,
   });
+  const [editModal, setEditModal] = useState({
+    isOpen: false,
+    review: null,
+    rating: 5,
+    comment: "",
+    saving: false,
+  });
 
   useEffect(() => {
     console.log("Reviews useEffect triggered, filters:", filters);
@@ -123,6 +130,44 @@ export default function ReviewsPage() {
       toast.error("Failed to delete review");
     } finally {
       setDeleteModal((prev) => ({ ...prev, deleting: false }));
+    }
+  };
+
+  const openEditModal = (review) => {
+    setEditModal({
+      isOpen: true,
+      review,
+      rating: review.rating,
+      comment: review.comment,
+      saving: false,
+    });
+  };
+
+  const closeEditModal = () => {
+    setEditModal({
+      isOpen: false,
+      review: null,
+      rating: 5,
+      comment: "",
+      saving: false,
+    });
+  };
+
+  const handleEditSubmit = async () => {
+    if (!editModal.review) return;
+    setEditModal((prev) => ({ ...prev, saving: true }));
+    try {
+      await reviewsAPI.update(editModal.review._id, {
+        rating: editModal.rating,
+        comment: editModal.comment,
+      });
+      toast.success("Review updated");
+      closeEditModal();
+      fetchReviews();
+    } catch (error) {
+      toast.error("Failed to update review");
+    } finally {
+      setEditModal((prev) => ({ ...prev, saving: false }));
     }
   };
 
@@ -314,6 +359,12 @@ export default function ReviewsPage() {
                           Reply
                         </button>
                         <button
+                          onClick={() => openEditModal(review)}
+                          className="px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700"
+                        >
+                          Edit
+                        </button>
+                        <button
                           onClick={() => openDeleteModal(review._id)}
                           className="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700"
                         >
@@ -430,6 +481,82 @@ export default function ReviewsPage() {
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
               >
                 {deleteModal.deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editModal.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-6 h-6 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-xl font-bold text-gray-900">Edit Review</h2>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rating
+              </label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() =>
+                      setEditModal((prev) => ({ ...prev, rating: star }))
+                    }
+                    className={`text-2xl ${star <= editModal.rating ? "text-yellow-400" : "text-gray-300"}`}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Comment
+              </label>
+              <textarea
+                value={editModal.comment}
+                onChange={(e) =>
+                  setEditModal((prev) => ({ ...prev, comment: e.target.value }))
+                }
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+              />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={closeEditModal}
+                disabled={editModal.saving}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEditSubmit}
+                disabled={
+                  editModal.saving ||
+                  !editModal.comment.trim() ||
+                  editModal.comment === editModal.review?.comment
+                }
+                className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50"
+              >
+                {editModal.saving ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </div>
