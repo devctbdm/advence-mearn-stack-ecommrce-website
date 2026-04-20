@@ -254,24 +254,33 @@ export default function Products() {
               }}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
-              {products.map((product) => (
-                <motion.div
-                  key={product._id}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    show: { opacity: 1, y: 0 },
-                  }}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="rounded-lg bg-white dark:bg-gray-800 shadow-sm p-4"
-                >
-                  <Link href={`/products/${product._id}`}>
-                    <img
-                      src={product.images?.[0]?.url}
-                      alt={product.name}
-                      className="w-full h-40 object-cover rounded"
-                    />
-                  </Link>
+               {products.map((product) => (
+                 <motion.div
+                   key={product._id}
+                   variants={{
+                     hidden: { opacity: 0, y: 20 },
+                     show: { opacity: 1, y: 0 },
+                   }}
+                   whileHover={{ scale: 1.03 }}
+                   whileTap={{ scale: 0.97 }}
+                   className="rounded-lg bg-white dark:bg-gray-800 shadow-sm p-4"
+                 >
+                   <Link href={`/products/${product._id}`}>
+                     <div className="relative">
+                       <img
+                         src={product.images?.[0]?.url}
+                         alt={product.name}
+                         className="w-full h-40 object-cover rounded"
+                       />
+                       {product.discountType && product.discountValue && (
+                         <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-bold shadow">
+                           {product.discountType === "percentage"
+                             ? `${product.discountValue}% OFF`
+                             : `${product.discountValue} OFF`}
+                         </div>
+                       )}
+                     </div>
+                   </Link>
 
                    <h3 className="mt-3 font-bold">{product.name}</h3>
                    <p className="text-sm text-gray-500">{product.category}</p>

@@ -81,15 +81,20 @@ const productSchema = new mongoose.Schema({
     enum: ['percentage', 'fixed'],
     default: null,
   },
-  discountValue: {
-    type: Number,
-    default: null,
-    min: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+   discountValue: {
+     type: Number,
+     default: null,
+     min: 0,
+   },
+   specifications: {
+     type: Map,
+     of: String,
+     default: {},
+   },
+   createdAt: {
+     type: Date,
+     default: Date.now,
+   },
 });
 
 productSchema.pre('save', async function () {
