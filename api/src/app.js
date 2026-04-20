@@ -19,6 +19,7 @@ import userRoutes from './routes/userRoutes.js';
 import shippingRoutes from './routes/shippingRoutes.js';
 import taxRoutes from './routes/taxRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import sliderRoutes from './routes/sliderRoutes.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -86,6 +87,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/shipping', shippingRoutes);
 app.use('/api/taxes', taxRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/sliders', sliderRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

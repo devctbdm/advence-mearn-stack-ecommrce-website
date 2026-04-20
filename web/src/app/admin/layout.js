@@ -9,7 +9,7 @@ const menuItems = [
   {
     name: "Dashboard",
     href: "/admin/dashboard",
-    icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v-6a1 1 0 00-1-1h-2m-6 7a1 1 0 01-1 1v2m4-4h4a1 1 0 011 1v2m-4-7a1 1 0 011-1v2m4-4h1a1 1 0 011 1v4",
+    icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v-6a1 1 0 00-1-1h-2m-6 7a1 1 0 001 1v2m4-4h4a1 1 0 011 1v2m-4-7a1 1 0 01-1-1v2m4-4h1a1 1 0 011 1v4",
   },
   {
     name: "Categories",
@@ -20,6 +20,11 @@ const menuItems = [
     name: "Products",
     href: "/admin/products",
     icon: "M20 7l-8-4-8 4m16 0l-8 4m8-4v10m-8 4l8 4-8 4m8-4l-8-4M4 7l8 4m-8-4l8 4",
+  },
+  {
+    name: "Sliders",
+    href: "/admin/sliders",
+    icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z",
   },
   {
     name: "Orders",

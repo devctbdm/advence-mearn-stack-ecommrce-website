@@ -15,7 +15,7 @@ cloudinary.config({
 console.log('Cloudinary cloud_name:', process.env.CLOUDINARY_CLOUD_NAME);
 console.log('Cloudinary api_key:', process.env.CLOUDINARY_API_KEY ? 'loaded' : 'missing');
 
-const storage = new CloudinaryStorage({
+const productStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'ecommerce/products',
@@ -23,9 +23,35 @@ const storage = new CloudinaryStorage({
   },
 });
 
+const sliderStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'ecommerce/sliders',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+  },
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'ecommerce/uploads',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+  },
+});
+
+export const uploadProductImages = multer({
+  storage: productStorage,
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
+export const uploadSliderImages = multer({
+  storage: sliderStorage,
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
 export const uploadImages = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB limit per file
 });
 
 export default cloudinary;

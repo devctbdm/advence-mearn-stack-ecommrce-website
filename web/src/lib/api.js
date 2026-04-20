@@ -168,4 +168,13 @@ export const reviewsAPI = {
   getPendingCount: () => api.get("/reviews/pending-count"),
 };
 
+export const slidersAPI = {
+  getAll: () => api.get("/sliders"),
+  getAllAdmin: () => api.get("/sliders/admin/all"),
+  getById: (id) => api.get(`/sliders/${id}`),
+  create: (data) => api.post("/sliders", data),
+  update: (id, data) => api.put(`/sliders/${id}`, data),
+  delete: (id) => api.delete(`/sliders/${id}`),
+};
+
 export default api;

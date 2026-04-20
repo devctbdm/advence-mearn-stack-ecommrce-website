@@ -9,7 +9,7 @@ import {
   updateProduct,
 } from '../controllers/productController.js';
 import { admin, protect } from '../middleware/auth.js';
-import { uploadImages } from '../config/cloudinary.js';
+import { uploadProductImages } from '../config/cloudinary.js';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post(
   '/',
   protect,
   admin,
-  uploadImages.array('images', 5),
+  uploadProductImages.array('images', 5),
   [
     body('name').trim().notEmpty().isLength({ min: 2, max: 100 }),
     body('description').trim().notEmpty(),
@@ -36,7 +36,7 @@ router.put(
   '/:id',
   protect,
   admin,
-  uploadImages.array('images', 5),
+  uploadProductImages.array('images', 5),
   [
     body('name').optional().trim().notEmpty().isLength({ min: 2, max: 100 }),
     body('price').optional().isFloat({ min: 0 }),
