@@ -13,13 +13,14 @@ import cartRoutes from './routes/cartRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import currencyRoutes from './routes/currencyRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import promoRoutes from './routes/promoRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import shippingRoutes from './routes/shippingRoutes.js';
-import taxRoutes from './routes/taxRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import shippingRoutes from './routes/shippingRoutes.js';
 import sliderRoutes from './routes/sliderRoutes.js';
+import taxRoutes from './routes/taxRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -88,6 +89,7 @@ app.use('/api/shipping', shippingRoutes);
 app.use('/api/taxes', taxRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/sliders', sliderRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

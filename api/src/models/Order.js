@@ -28,13 +28,16 @@ const orderSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     required: true,
-    enum: ['credit_card', 'paypal', 'cash_on_delivery'],
+    enum: ['credit_card', 'paypal', 'cash_on_delivery', 'sslcommerz'],
   },
   paymentResult: {
     id: String,
     status: String,
     updateTime: String,
     emailAddress: String,
+  },
+  paymentTransactionId: {
+    type: String,
   },
   itemsPrice: {
     type: Number,
