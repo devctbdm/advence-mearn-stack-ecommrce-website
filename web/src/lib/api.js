@@ -177,4 +177,9 @@ export const slidersAPI = {
   delete: (id) => api.delete(`/sliders/${id}`),
 };
 
+export const paymentAPI = {
+  initiateSslcommerz: (orderId) => api.post("/payments/sslcommerz/initiate", { orderId }),
+  getStatus: (orderId) => api.get(`/payments/status/${orderId}`),
+};
+
 export default api;

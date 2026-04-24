@@ -12,6 +12,3 @@ api/node_modules/
 web/node_modules/
 web/.next/
 
-# Optional extras
-dist/
-build/

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/lib/useAuthStore";
-import { cartAPI, ordersAPI, shippingAPI, taxAPI, authAPI } from "@/lib/api";
+import { cartAPI, ordersAPI, shippingAPI, taxAPI, authAPI, paymentAPI } from "@/lib/api";
 import {
   AlertCircle,
   ArrowRight,
@@ -15,6 +15,7 @@ import {
   ShoppingBag,
   Truck,
   X,
+  Landmark,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -192,13 +193,27 @@ export default function CheckoutPage() {
       };
 
       const res = await ordersAPI.create(orderData);
+      const orderId = res.data._id;
+      
       toast.success("Order placed successfully!");
       localStorage.removeItem("selectedShipping");
+      
+      if (paymentMethod === "sslcommerz") {
+        // Initiate SSLCommerz payment
+        const paymentRes = await paymentAPI.initiateSslcommerz(orderId);
+        if (paymentRes.data.success) {
+          // Redirect to SSLCommerz gateway
+          window.location.href = paymentRes.data.gatewayUrl;
+          return;
+        } else {
+          throw new Error("Failed to initiate payment");
+        }
+      }
       
       await cartAPI.clear();
       window.dispatchEvent(new Event("cart-updated"));
       
-      router.push(`/orders/${res.data._id}`);
+      router.push(`/orders/${orderId}`);
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to place order");
@@ -538,6 +553,22 @@ export default function CheckoutPage() {
                       <p className="text-sm text-gray-500">Pay when you receive your order</p>
                     </div>
                     <Truck className="w-6 h-6 text-gray-400" />
+                  </label>
+
+                  <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="sslcommerz"
+                      checked={paymentMethod === "sslcommerz"}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <div className="ml-4 flex-1">
+                      <p className="font-medium text-gray-900">SSLCommerz</p>
+                      <p className="text-sm text-gray-500">Pay securely via SSLCommerz Payment Gateway</p>
+                    </div>
+                    <Landmark className="w-6 h-6 text-blue-600" />
                   </label>
                 </div>
 

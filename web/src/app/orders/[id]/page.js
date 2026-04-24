@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ordersAPI } from "@/lib/api";
+import { ordersAPI, paymentAPI } from "@/lib/api";
 import {
   CheckCircle,
   Clock,
@@ -13,8 +13,10 @@ import {
   Phone,
   MapPin,
   CreditCard,
+  Landmark,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function OrderConfirmationPage() {
   const params = useParams();
@@ -35,6 +37,19 @@ export default function OrderConfirmationPage() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePayNow = async () => {
+    try {
+      const res = await paymentAPI.initiateSslcommerz(order._id);
+      if (res.data.success) {
+        window.location.href = res.data.gatewayUrl;
+      } else {
+        toast.error("Failed to initiate payment");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to initiate payment");
     }
   };
 
@@ -115,16 +130,18 @@ export default function OrderConfirmationPage() {
                   <span className="font-mono text-sm">{order.trackingNumber}</span>
                 </div>
               )}
-              <div className="flex justify-between">
-                <span className="text-gray-600">Payment Method</span>
-                <span className="font-medium capitalize">
-                  {order.paymentMethod === "credit_card"
-                    ? "Credit Card"
-                    : order.paymentMethod === "paypal"
-                    ? "PayPal"
-                    : "Cash on Delivery"}
-                </span>
-              </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Payment Method</span>
+                  <span className="font-medium capitalize">
+                    {order.paymentMethod === "credit_card"
+                      ? "Credit Card"
+                      : order.paymentMethod === "paypal"
+                      ? "PayPal"
+                      : order.paymentMethod === "sslcommerz"
+                      ? "SSLCommerz"
+                      : "Cash on Delivery"}
+                  </span>
+                </div>
               {order.shippingMethod && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
@@ -137,12 +154,27 @@ export default function OrderConfirmationPage() {
                   </div>
                 </div>
               )}
-              {order.isPaid && (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Payment</span>
-                  <span className="text-green-600 font-medium">Paid</span>
-                </div>
-              )}
+                {order.isPaid && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Payment</span>
+                    <span className="text-green-600 font-medium">Paid</span>
+                  </div>
+                )}
+                
+                {!order.isPaid && order.paymentMethod === "sslcommerz" && (
+                  <div className="mt-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-yellow-600 font-medium">Payment Pending</span>
+                    </div>
+                    <button
+                      onClick={handlePayNow}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2"
+                    >
+                      <Landmark className="w-4 h-4" />
+                      Pay Now with SSLCommerz
+                    </button>
+                  </div>
+                )}
             </div>
           </div>
 
